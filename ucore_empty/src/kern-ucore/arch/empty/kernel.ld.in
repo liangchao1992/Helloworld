@@ -1,0 +1,60 @@
+OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
+OUTPUT_ARCH(arm)
+
+MEMORY
+{
+  FLASH        (rx) : ORIGIN = 0x00000000, LENGTH = 0x40000   /* 256k */
+  RAM_VECTOR  (rwx) : ORIGIN = 0x20000000, LENGTH = 0x00400   /*   1k */
+  RAM_BSSDATA (rwx) : ORIGIN = 0x20000400, LENGTH = 0x01c00   /*   7k */
+  RAM_SYSTEM  (rwx) : ORIGIN = 0x20002000, LENGTH = 0x05000   /*  20k */
+  RAM_USER    (rwx) : ORIGIN = 0x20007000, LENGTH = 0x01000   /*   4k */
+  RAM_STACK   (rwx) : ORIGIN = 0x20008000, LENGTH = 0x00000   /*   0k */
+                                                          /*sum:  32k */
+}
+
+ENTRY(reset_handler)
+
+SECTIONS {
+	. = 0x00000000;
+	.text : 
+	{
+		*(.vector)
+		PROVIDE(__kernel_text_start = .);
+		*(.text)
+		PROVIDE(__kernel_text_end = .);
+		*(.rodata)
+	} > FLASH
+	
+    __exidx_start = .;
+    .ARM.exidx :
+    {
+        *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+    } > FLASH
+    __exidx_end = .;
+    		
+	__data_org = .;
+	.data : AT(__data_org) 
+	{
+		__data_start = .;
+		*(.data)
+		__data_end = .;
+	} > RAM_BSSDATA
+	.bss : 
+	{
+		__bss_start = .;
+		PROVIDE (__noinit_start = .);
+		*(.noinit)
+		PROVIDE (__noinit_end = .);
+		*(.bss)
+		*(COMMON)
+		__bss_end = .;
+		__end = .;
+	} > RAM_BSSDATA
+	
+    __stack_top = ORIGIN(RAM_STACK);
+	
+    /DISCARD/ :
+    {
+        *(.eh_*)
+    }
+}
