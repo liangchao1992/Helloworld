@@ -1,0 +1,24 @@
+版本一
+1.从wzw的github上面获得源码
+https://github.com/wuzw10/ucore_empty.git
+2.编译通过
+make ARCH=arm BOARD=goldfishv7 menuconfig
+3.对buddy_pmm.c挖空
+4.对mmu.c挖空  （因为目标板子上没有mmu）
+5.对一些不必要的代码进行挖空
+6.修改src/kern-ucore/arch/empty/Makefile.image
+使其能生成板子上能识别的hex文件。
+.elf->.hex
+ (1) KERN_HEX := $(OBJPATH_ROOT)/ucore_plus.hex
+ (2)$(KERN_HEX) : $(KERNEL_ELF)
+	@echo Makeing ucore_plus.hex
+	$(Q)$(CROSS_COMPILE)objcopy -O ihex $(KERNEL_ELF) $@
+	     (交叉编译的路径)
+ (3)all: $(KERNEL_ELF) $(KERNEL_UIMAGE) $(KERN_HEX)
+
+版本二
+删除对串口的操作。
+1.主。删除 src/kern-ucore/arch/empty/mach-goldfish/Makefile文件中
+  mb9bf506r_uart.o文件的生成。
+2.删除有关串口的文件。
+		   mb9bf506r.h  mb9bf506r_uart.c   			  system_mb9bf50x.h   uart.s

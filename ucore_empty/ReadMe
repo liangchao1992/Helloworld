@@ -15,3 +15,15 @@ make ARCH=arm BOARD=goldfishv7 menuconfig
 	$(Q)$(CROSS_COMPILE)objcopy -O ihex $(KERNEL_ELF) $@
 	     (交叉编译的路径)
  (3)all: $(KERNEL_ELF) $(KERNEL_UIMAGE) $(KERN_HEX)
+7.编写 src/kern-ucore/arch/empty/ucore.ld.in 链接脚本文件。
+  (1)对板子上存储器各部分进行定义  如flash,stack,user,system，vector,等。
+  （2）定义reset按钮的入口地址（0x000000...）。并进行各种处理。
+
+
+版本二
+删除对串口的操作。
+1.主。删除 src/kern-ucore/arch/empty/mach-goldfish/Makefile文件中
+  mb9bf506r_uart.o文件的生成。
+2.删除有关串口的文件。
+		   mb9bf506r.h  mb9bf506r_uart.c   			  system_mb9bf50x.h   uart.s
+

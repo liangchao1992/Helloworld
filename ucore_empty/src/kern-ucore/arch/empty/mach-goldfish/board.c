@@ -44,19 +44,7 @@ void board_init_early()
 
 void board_init()
 {
-	uart_init();
-	//serial_init(0,0);
-	uart_sendchar('#');
-	uart_sendchar('#');
-	uart_sendchar('#');
-	uart_sendchar('#');
-	while(1){
-		uart_sendchar('#');
-	}
-	uart_sendchar('#');
-	uart_sendchar('#');
-	uart_sendchar('#');
-	uart_sendchar('#');
+	
 }
 
 /* no nand */

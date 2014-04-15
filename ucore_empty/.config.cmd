@@ -6,7 +6,7 @@ deps_config := \
 	src/kern-ucore/mm/Kconfig \
 	src/kern-ucore/numa/Kconfig \
 	src/kern-ucore/Kconfig \
-	/home/wuzw/ucore_empty/src/kern-ucore/arch/empty/Kconfig
+	/home/liangchao/MyWork/graduate/Not_ucore_empty/ucore_empty/src/kern-ucore/arch/empty/Kconfig
 
 include/config/auto.conf: \
 	$(deps_config)
